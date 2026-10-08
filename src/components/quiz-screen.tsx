@@ -1,7 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
 import { DOMAINS, type Question } from "../data/questions";
 import {
+  choicesInOrder,
+  correctLetters,
   isCorrect,
+  letterAt,
   loadSession,
   questionsByIds,
   saveSession,
@@ -175,7 +178,7 @@ export function QuizScreen() {
         <h1 className="mt-3 text-2xl leading-snug text-ink sm:text-[1.7rem]">{q.prompt}</h1>
 
         <ul className="mt-6 space-y-3">
-          {q.choices.map((choice) => {
+          {choicesInOrder(q, session).map((choice, i) => {
             const on = picked.includes(choice.id);
             const good = revealed && q.correct.includes(choice.id);
             const bad = revealed && on && !q.correct.includes(choice.id);
@@ -201,7 +204,7 @@ export function QuizScreen() {
                       good ? "border-good text-good" : bad ? "border-bad text-bad" : on ? "border-teal text-teal" : "border-line text-muted",
                     ].join(" ")}
                   >
-                    {good ? <Check className="size-3.5" /> : bad ? <X className="size-3.5" /> : choice.id.toUpperCase()}
+                    {good ? <Check className="size-3.5" /> : bad ? <X className="size-3.5" /> : letterAt(i)}
                   </span>
                   <span className="text-[15px] leading-snug">{choice.text}</span>
                 </button>
@@ -213,7 +216,7 @@ export function QuizScreen() {
         {revealed && (
           <div className="mt-6 rounded-2xl bg-foam px-4 py-4 text-sm leading-relaxed text-ink">
             <p className="font-semibold text-teal-deep">
-              {isCorrect(q, picked) ? "Correct" : "Not quite"} — {q.correct.map((id) => id.toUpperCase()).join(" & ")}
+              {isCorrect(q, picked) ? "Correct" : "Not quite"} — {correctLetters(q, session)}
             </p>
             <p className="mt-2 text-ink">{q.why}</p>
           </div>
@@ -303,8 +306,8 @@ function Results({
               {shown && (
                 <div className="border-t border-line px-4 py-3 text-sm">
                   <p className="text-muted">
-                    Answer {q.correct.map((id) => id.toUpperCase()).join(" & ")}:{" "}
-                    {q.choices
+                    Answer {correctLetters(q, session)}:{" "}
+                    {choicesInOrder(q, session)
                       .filter((c) => q.correct.includes(c.id))
                       .map((c) => c.text)
                       .join(" · ")}

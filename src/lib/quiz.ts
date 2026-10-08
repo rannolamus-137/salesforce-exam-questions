@@ -1,4 +1,4 @@
-import { QUESTIONS, type DomainId, type Question } from "../data/questions";
+import { QUESTIONS, type Choice, type DomainId, type Question } from "../data/questions";
 
 export type Mode = "study" | "exam";
 
@@ -11,7 +11,33 @@ export type Session = {
   startedAt: number;
   finishedAt?: number;
   limitMs: number | null;
+  /** Shuffled choice ids per question, so the right answer lands on a random letter. */
+  order?: Record<string, string[]>;
 };
+
+const LETTERS = "ABCDEFGH";
+
+/** The question's choices in the order this session shows them. */
+export function choicesInOrder(q: Question, session: Session): Choice[] {
+  const ids = session.order?.[q.id];
+  if (!ids) return q.choices;
+  const byId = new Map(q.choices.map((c) => [c.id, c]));
+  const ordered = ids.map((id) => byId.get(id)).filter((c): c is Choice => Boolean(c));
+  return ordered.length === q.choices.length ? ordered : q.choices;
+}
+
+/** The on-screen letter (A, B, C…) at a given position. */
+export function letterAt(index: number): string {
+  return LETTERS[index] ?? String(index + 1);
+}
+
+/** On-screen letters of the correct answers, e.g. "B" or "A & D". */
+export function correctLetters(q: Question, session: Session): string {
+  return choicesInOrder(q, session)
+    .map((c, i) => (q.correct.includes(c.id) ? letterAt(i) : null))
+    .filter(Boolean)
+    .join(" & ");
+}
 
 const KEY = "cloudline-session-v1";
 
@@ -44,6 +70,7 @@ export function newSession(domain: DomainId | "all", mode: Mode): Session {
     mode,
     startedAt: Date.now(),
     limitMs: mode === "exam" ? 90 * 60 * 1000 : null,
+    order: Object.fromEntries(bank.map((q) => [q.id, shuffle(q.choices.map((c) => c.id))])),
   };
 }
 
