@@ -1,7 +1,5 @@
-import { Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { Check, X } from "lucide-react";
-import { DOMAINS, type Question } from "@/data/questions";
+import { DOMAINS, type Question } from "../data/questions";
 import {
   isCorrect,
   loadSession,
@@ -9,7 +7,24 @@ import {
   saveSession,
   scoreSession,
   type Session,
-} from "@/lib/quiz";
+} from "../lib/quiz";
+import { go, HOME_HREF } from "../lib/route";
+
+function Check({ className }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M20 6 9 17l-5-5" />
+    </svg>
+  );
+}
+
+function X({ className }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M18 6 6 18M6 6l12 12" />
+    </svg>
+  );
+}
 
 function formatClock(ms: number) {
   const s = Math.max(0, Math.floor(ms / 1000));
@@ -19,7 +34,6 @@ function formatClock(ms: number) {
 }
 
 export function QuizScreen() {
-  const navigate = useNavigate();
   const [session, setSession] = useState<Session | null>(null);
   const [ready, setReady] = useState(false);
   const [now, setNow] = useState(() => Date.now());
@@ -48,6 +62,13 @@ export function QuizScreen() {
     [session],
   );
 
+  // Start each new question (and the results page) at the top of the screen.
+  const index = session?.index;
+  const finished = Boolean(session?.finishedAt);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [index, finished]);
+
   function commit(next: Session) {
     setSession(next);
     saveSession(next);
@@ -62,15 +83,15 @@ export function QuizScreen() {
       <main className="mx-auto max-w-xl px-5 py-20">
         <h1 className="text-3xl text-ink">No quiz in progress</h1>
         <p className="mt-3 text-muted">Start a study set or a timed exam from the desk.</p>
-        <Link to="/" className="mt-6 inline-flex rounded-full bg-teal px-5 py-3 text-foam">
+        <a href={HOME_HREF} className="mt-6 inline-flex rounded-full bg-teal px-5 py-3 text-foam">
           Back to Cloudline
-        </Link>
+        </a>
       </main>
     );
   }
 
   if (session.finishedAt) {
-    return <Results session={session} questions={questions} onAgain={() => navigate({ to: "/" })} />;
+    return <Results session={session} questions={questions} onAgain={() => go("home")} />;
   }
 
   const q = questions[session.index];
@@ -121,9 +142,9 @@ export function QuizScreen() {
   return (
     <main className="mx-auto max-w-3xl px-4 py-6 sm:px-6 sm:py-10">
       <header className="mb-6 flex items-center justify-between gap-3">
-        <Link to="/" className="font-display text-lg text-teal-deep">
+        <a href={HOME_HREF} className="font-display text-lg text-teal-deep">
           Cloudline
-        </Link>
+        </a>
         <div className="flex items-center gap-3 text-sm text-muted">
           <span>
             {session.index + 1} / {questions.length}

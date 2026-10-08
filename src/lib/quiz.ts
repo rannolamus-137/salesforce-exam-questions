@@ -1,4 +1,4 @@
-import { QUESTIONS, type DomainId, type Question } from "@/data/questions";
+import { QUESTIONS, type DomainId, type Question } from "../data/questions";
 
 export type Mode = "study" | "exam";
 
@@ -48,22 +48,29 @@ export function newSession(domain: DomainId | "all", mode: Mode): Session {
 }
 
 export function loadSession(): Session | null {
-  if (typeof window === "undefined") return null;
   try {
     const raw = localStorage.getItem(KEY);
-    if (!raw) return null;
+    if (!raw) return memorySession;
     const parsed = JSON.parse(raw) as Session;
     if (!parsed.ids?.length) return null;
     return parsed;
   } catch {
-    return null;
+    return memorySession;
   }
 }
 
+// Fallback for browsers that block storage (some private windows):
+// the quiz still works, it just won't survive a page refresh.
+let memorySession: Session | null = null;
+
 export function saveSession(session: Session | null) {
-  if (typeof window === "undefined") return;
-  if (!session) localStorage.removeItem(KEY);
-  else localStorage.setItem(KEY, JSON.stringify(session));
+  memorySession = session;
+  try {
+    if (!session) localStorage.removeItem(KEY);
+    else localStorage.setItem(KEY, JSON.stringify(session));
+  } catch {
+    // storage unavailable — memorySession keeps the quiz going
+  }
 }
 
 export function isCorrect(q: Question, picked: string[] | undefined): boolean {
