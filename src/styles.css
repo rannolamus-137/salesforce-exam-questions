@@ -1,0 +1,44 @@
+@import url("https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,520;9..144,640&family=Outfit:wght@400;500;600&display=swap");
+@import "tailwindcss";
+
+@theme {
+  --color-paper: #f3efe6;
+  --color-paper-deep: #e7e0d2;
+  --color-ink: #14242c;
+  --color-muted: #5c6b73;
+  --color-line: #d5cbb8;
+  --color-teal: #0c6e74;
+  --color-teal-deep: #084e53;
+  --color-foam: #e5f3f2;
+  --color-copper: #b85a28;
+  --color-good: #1f7a4d;
+  --color-good-bg: #e5f5ec;
+  --color-bad: #9d2c2c;
+  --color-bad-bg: #fdecec;
+  --font-sans: "Outfit", system-ui, sans-serif;
+  --font-display: "Fraunces", Georgia, serif;
+  --radius-card: 1.25rem;
+}
+
+@layer base {
+  html, body { height: 100%; }
+  body {
+    margin: 0;
+    background:
+      radial-gradient(1200px 500px at 100% -10%, #d7ebe8 0%, transparent 55%),
+      radial-gradient(900px 400px at -10% 110%, #f3dfd0 0%, transparent 50%),
+      var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    line-height: 1.5;
+  }
+  button:not(:disabled), [role="button"]:not(:disabled) { cursor: pointer; }
+  h1, h2, h3 { font-family: var(--font-display); font-weight: 560; letter-spacing: -0.02em; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
