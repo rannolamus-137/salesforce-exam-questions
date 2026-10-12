@@ -8,4 +8,4 @@ Free practice questions for the **Salesforce Marketing Cloud Engagement Speciali
 
 These are original practice items based on the public exam objectives, not copies of real exam questions.
 
-**Try it: https://rannolamus-137.github.io/salesforce-exam-questions-grok-test/**
+**Try it: https://rannolamus-137.github.io/salesforce-exam-questions/**
