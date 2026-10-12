@@ -7,7 +7,7 @@ export const PRACTICES: Question[] = [
     prompt:
       "Harbor & Pine, a home-goods retailer, is moving its promotional email from a shared IP to a new dedicated IP. Its file has 900,000 subscribers: 150,000 opened or clicked in the last 60 days, 400,000 engaged in the last year, and the rest have been silent for over a year. The marketing director wants to move the whole file to the new IP on day one to hit the holiday calendar. What should the email specialist recommend?",
     choices: [
-      { id: "a", text: "Start with the most recently engaged subscribers in small daily volumes and increase gradually as inbox placement and complaint rates stay healthy" },
+      { id: "a", text: "Start with recently engaged subscribers in small daily volumes and grow as placement stays healthy" },
       { id: "b", text: "Send to the full file on day one, because a dedicated IP starts with no reputation and so has nothing to lose" },
       { id: "c", text: "Send only to the silent segment first so that engaged subscribers are not exposed to any deliverability risk" },
       { id: "d", text: "Hold volume flat for the first week, then jump straight to the entire file once the IP has settled" },
@@ -75,29 +75,29 @@ export const PRACTICES: Question[] = [
     id: "p12",
     domain: "practices",
     prompt:
-      "Which TWO elements must be included in a commercial marketing email to comply with common commercial-email regulations such as CAN-SPAM? (Choose 2.)",
+      "A weekly promotion to 600,000 subscribers shows: delivered 98.2%, hard bounces 0.1%, and spam-complaint rates of 0.02% at Gmail, 0.04% at Outlook and 0.31% at Yahoo. Yahoo opens have also fallen by 40% over three sends, while other providers are stable. Which response is the most appropriate?",
     choices: [
-      { id: "a", text: "A working way to opt out of future commercial messages" },
-      { id: "b", text: "The sender's valid physical postal address" },
-      { id: "c", text: "A personalized first name in the greeting" },
-      { id: "d", text: "A link to view the email in a browser" },
+      { id: "a", text: "Treat it as a Yahoo-specific reputation issue: limit Yahoo volume to engaged subscribers and find what changed" },
+      { id: "b", text: "Treat it as a platform-wide delivery fault and open a case, because bounce and complaint rates are healthy overall" },
+      { id: "c", text: "Raise send frequency to Yahoo subscribers so their engagement signals recover faster than the complaints build" },
+      { id: "d", text: "Remove all Yahoo addresses permanently, because one provider's complaint rate always indicates the whole list is purchased" },
     ],
-    correct: ["a", "b"],
-    why: "Commercial messages need a functional opt-out and the sender's physical address. Personalization and a view-in-browser link are good practice but are not legal requirements.",
+    correct: ["a"],
+    why: "Overall metrics hide a provider-level problem. Complaints at one mailbox provider are the clearest sign of a reputation issue there, so limit exposure to the engaged core and look for what changed (new source, cadence, creative). Sending more worsens it and deleting a whole provider's subscribers is an overreaction.",
   },
   {
     id: "p13",
     domain: "practices",
     prompt:
-      "A company collects email addresses from a trade-show badge scanner. Attendees did not tick any opt-in box, but the sales team insists they showed interest by visiting the booth. How should the email specialist treat these addresses?",
+      "A brand publishes a DMARC policy of p=reject for brand.com. Marketing then sends from news@brand.com through Marketing Cloud using the default shared sending domain, with no Sender Authentication Package. Some receivers start rejecting the mail. Which TWO statements explain the problem and the fix? (Choose 2.)",
     choices: [
-      { id: "a", text: "Send an invitation that asks them to opt in to marketing email, and only add those who confirm" },
-      { id: "b", text: "Add them all to the weekly newsletter because they visited the booth" },
-      { id: "c", text: "Add them but suppress anyone who complains after the first send" },
-      { id: "d", text: "Add only those with company email addresses because B2B contacts never need consent" },
+      { id: "a", text: "DMARC needs SPF or DKIM to pass AND align with the visible From domain, and the shared domain's authentication does not align with brand.com" },
+      { id: "b", text: "A sending domain authenticated through Sender Authentication Package lets DKIM/SPF align with the From domain so DMARC can pass" },
+      { id: "c", text: "DMARC rejection occurs only when the subject line contains promotional terms, so the copy should be softened" },
+      { id: "d", text: "Marketing Cloud overrides DMARC on commercial sends, so the rejections must come from a separate IP issue" },
     ],
-    correct: ["a"],
-    why: "Visiting a booth is not the same as consenting to marketing email. A permission-seeking message (or an explicit opt-in at capture) keeps the file clean and compliant. Waiting for complaints puts reputation at risk, and consent rules do not disappear because an address is a business address.",
+    correct: ["a", "b"],
+    why: "DMARC passes only when SPF or DKIM authenticates a domain that aligns with the From address. Default shared-domain signing does not align with brand.com. Sender Authentication Package sets up a branded domain so alignment is possible. Copy and IP reputation are separate matters.",
   },
   {
     id: "p14",
@@ -119,7 +119,7 @@ export const PRACTICES: Question[] = [
     prompt:
       "Bright Basket plans to send its first Black Friday campaign from a newly purchased list of 200,000 addresses that a vendor describes as 'verified shoppers'. What is the biggest risk?",
     choices: [
-      { id: "a", text: "Purchased addresses have no consent for Bright Basket and often include spam traps, which damages sender reputation" },
+      { id: "a", text: "Purchased addresses lack consent and often include spam traps, which damages sender reputation" },
       { id: "b", text: "The list will be too large for Marketing Cloud to import in one file, so the send will be delayed" },
       { id: "c", text: "The subject line will be truncated on mobile because purchased lists use older address formats" },
       { id: "d", text: "Purchased lists cannot be segmented, so every subscriber would receive the same offer" },
@@ -133,7 +133,7 @@ export const PRACTICES: Question[] = [
     prompt:
       "A subscriber receives a welcome series that includes a coupon, a product guide, and a survey invitation. Which welcome-series design best supports long-term engagement?",
     choices: [
-      { id: "a", text: "Send the first email immediately after sign-up, confirm what they will receive and how often, and space the follow-ups over several days" },
+      { id: "a", text: "Send the first email right after sign-up, set expectations on content and frequency, then space follow-ups" },
       { id: "b", text: "Send all three messages within the first hour so the new subscriber cannot miss the coupon, guide or survey" },
       { id: "c", text: "Wait a month before the first email so the subscriber has time to settle into the brand" },
       { id: "d", text: "Skip the welcome series and add the subscriber directly to the next promotional blast" },
@@ -147,7 +147,7 @@ export const PRACTICES: Question[] = [
     prompt:
       "A marketer is reviewing a campaign dashboard and sees that the open rate rose from 28% to 52% in one quarter, but click-through rate and conversions did not move. A large share of the audience uses Apple Mail. What is the best interpretation?",
     choices: [
-      { id: "a", text: "Mail privacy protection likely pre-loads tracking pixels, inflating opens, so clicks and conversions should guide decisions" },
+      { id: "a", text: "Mail privacy protection pre-loads tracking pixels and inflates opens, so judge by clicks and conversions" },
       { id: "b", text: "The creative has improved dramatically, so the team should double send frequency to capture the gain" },
       { id: "c", text: "Opens are always accurate, so the lack of clicks proves the offer itself is poor" },
       { id: "d", text: "The tracking data views are corrupted and should be reset before any further analysis" },
@@ -159,15 +159,15 @@ export const PRACTICES: Question[] = [
     id: "p18",
     domain: "practices",
     prompt:
-      "A subscriber clicks the unsubscribe link in a commercial email. How quickly should the company honor the request, and what is the best practice?",
+      "A subscriber clicks 'This is spam' in their mailbox provider's interface. The provider participates in a feedback loop with Marketing Cloud. What should the sender expect, and what does it imply for list hygiene?",
     choices: [
-      { id: "a", text: "Honor it promptly, within the legal timeframe, and ideally immediately so no further commercial emails are sent" },
-      { id: "b", text: "Wait for the next monthly list update so the change can be processed together with other changes in a batch" },
-      { id: "c", text: "Ask the subscriber to confirm the request by replying to an email before removing them from sends" },
-      { id: "d", text: "Continue sending commercial email until the subscriber has used the unsubscribe link at least three times" },
+      { id: "a", text: "The complaint is reported back and the subscriber is unsubscribed automatically, so complaint rates should be monitored as an early reputation warning" },
+      { id: "b", text: "Nothing is recorded, because only unsubscribe-link clicks are tracked and complaints must be gathered by hand" },
+      { id: "c", text: "The subscriber is moved to Held status for 30 days and then reactivated automatically to give the sender another chance" },
+      { id: "d", text: "The complaint is added to the next tracking extract but the subscriber keeps receiving mail until they use the unsubscribe link" },
     ],
     correct: ["a"],
-    why: "Opt-outs must be honored promptly, and an unsubscribe in Marketing Cloud takes effect automatically on future sends. Adding friction or batch delays is both poor practice and a compliance risk.",
+    why: "Feedback loops return complaints to the sender, and Marketing Cloud treats a complaint as an opt-out so the subscriber stops receiving commercial email. Because complaints damage reputation quickly, rising complaint rates should trigger a review of targeting, frequency and list sources.",
   },
   {
     id: "p19",
@@ -187,15 +187,15 @@ export const PRACTICES: Question[] = [
     id: "p20",
     domain: "practices",
     prompt:
-      "Which TWO metrics best indicate that a promotional program is harming sender reputation and needs immediate attention? (Choose 2.)",
+      "Two days after a sudden send to 250,000 contacts from an old trade-show file, delivery to several providers collapses, and the sending IP appears on a public blocklist. Which TWO actions belong in the remediation? (Choose 2.)",
     choices: [
-      { id: "a", text: "A rising spam-complaint rate" },
-      { id: "b", text: "A rising hard-bounce rate from invalid addresses" },
-      { id: "c", text: "A slightly higher click-to-open rate" },
-      { id: "d", text: "More forwards to a friend" },
+      { id: "a", text: "Stop mailing the old file, identify and remove the segment that likely contained spam traps or invalid addresses, and rebuild from engaged, permissioned contacts" },
+      { id: "b", text: "Once the cause is removed, follow the blocklist operator's delisting process and ramp volume back up gradually" },
+      { id: "c", text: "Request delisting immediately and resume the same send to the same file to prove the problem is fixed" },
+      { id: "d", text: "Move the same file to a different sending IP so the blocklist no longer applies to the program" },
     ],
     correct: ["a", "b"],
-    why: "Complaints and hard bounces are the signals mailbox providers weigh most heavily when deciding whether a sender is trustworthy. Better click-to-open or more forwards are positive engagement indicators.",
+    why: "Blocklisting is a symptom, so remove the cause (old or unpermissioned data with traps) before asking for delisting, then ramp carefully. Re-sending to the same file or hopping IPs just repeats the offense on a new reputation.",
   },
   {
     id: "p21",
@@ -215,15 +215,15 @@ export const PRACTICES: Question[] = [
     id: "p22",
     domain: "practices",
     prompt:
-      "A hotel chain is deciding which sends should be classified as transactional. Which message is most appropriately sent as a transactional email?",
+      "A three-email welcome series has these results: email 1 open 62% and unsubscribe 0.2%; email 2 open 18% and unsubscribe 0.3%; email 3 (a 20% coupon) open 11% and unsubscribe 1.4%. Mailbox-provider complaints also rise on email 3. Which conclusion is best supported?",
     choices: [
-      { id: "a", text: "A booking confirmation containing the reservation details the guest requested" },
-      { id: "b", text: "A promotion offering 20% off the guest's next stay, since the guest has just completed a booking" },
-      { id: "c", text: "A newsletter with seasonal travel ideas sent to everyone who has ever booked" },
-      { id: "d", text: "A survey that invites guests to join the loyalty program after their stay" },
+      { id: "a", text: "Email 3 is mismatched on timing, cadence or relevance; review those before changing the offer" },
+      { id: "b", text: "The series is working as designed because open rates always fall and unsubscribes always rise for the final email" },
+      { id: "c", text: "The coupon is too generous; raise it to 30% so that more subscribers stay through the end of the series" },
+      { id: "d", text: "The first email was too effective, so it should be delayed by a week to equalize the three open rates" },
     ],
     correct: ["a"],
-    why: "Transactional messages are triggered by a customer action and deliver information that completes or confirms it. Promotional or relationship-building content belongs under a commercial classification even if it follows a transaction.",
+    why: "A steep unsubscribe and complaint jump on one email in a series points to timing, cadence or relevance, not the series structure as a whole. Check what subscribers were promised at signup and how closely the emails are spaced before touching the offer.",
   },
   {
     id: "p23",
@@ -243,42 +243,42 @@ export const PRACTICES: Question[] = [
     id: "p24",
     domain: "practices",
     prompt:
-      "A company's welcome email was designed with a single large image that contains all the text. Many subscribers' clients block images by default. What is the best fix?",
+      "A retailer wants to re-engage 120,000 subscribers who have neither opened nor clicked in 12 months. Which plan best protects deliverability while giving them a fair chance to stay?",
     choices: [
-      { id: "a", text: "Use live HTML text for key content and add descriptive alt text to images" },
-      { id: "b", text: "Make the single image larger and increase its resolution so it stays readable on small screens" },
-      { id: "c", text: "Add several more images with the same text so that at least one is likely to load" },
-      { id: "d", text: "Remove the unsubscribe link and footer to simplify the layout for image-blocking clients" },
+      { id: "a", text: "Send a short re-engagement series to this segment only, with a deadline, and suppress non-responders" },
+      { id: "b", text: "Send the regular promotional calendar to them at higher frequency for a month, then evaluate the results" },
+      { id: "c", text: "Add them to a separate list and send the usual newsletter, since inactive subscribers cannot complain" },
+      { id: "d", text: "Move them all to a brand-new dedicated IP so that their poor engagement does not affect the main program" },
     ],
     correct: ["a"],
-    why: "An image-only email is a blank screen when images are blocked and is also a spam signal. Live text and alt text keep the message readable and accessible.",
+    why: "A bounded, separate win-back with a clear end and a suppression rule protects the main program. Mailing inactives more often, or hiding them on another IP, spreads or hides the same reputation damage.",
   },
   {
     id: "p25",
     domain: "practices",
     prompt:
-      "A senior stakeholder asks why the email team would rather send fewer, more targeted messages to engaged subscribers than a daily blast to the full list. Which statement best explains the benefit?",
+      "A company's welcome email offers a 10% discount. Within hours, hundreds of sign-ups arrive from the same few IP addresses using addresses like a1@mail-example.com and a2@mail-example.com, and the discount is redeemed. Which acquisition control best reduces this abuse while keeping a good signup experience for real customers?",
     choices: [
-      { id: "a", text: "Providers weigh engagement and complaints for inbox placement, so targeted sends protect future delivery" },
-      { id: "b", text: "Marketing Cloud charges a lower license fee for smaller sends, so targeted sending reduces cost" },
-      { id: "c", text: "Subscribers are legally limited to one commercial email per week in most regions" },
-      { id: "d", text: "A smaller send removes the requirement to include an unsubscribe link and postal address" },
+      { id: "a", text: "Double opt-in plus form protection such as CAPTCHA, with the discount released only after confirmation" },
+      { id: "b", text: "Remove the discount so that no incentive remains, then keep the single opt-in as is" },
+      { id: "c", text: "Send the discount code in the subject line so it is available without opening the email" },
+      { id: "d", text: "Import the new sign-ups straight into the promotional list and let unsubscribes remove the fake ones" },
     ],
     correct: ["a"],
-    why: "Inbox providers use engagement and complaint signals to decide where mail lands. Mailing disengaged contacts drags those signals down. There is no legal weekly cap and an unsubscribe link is still required.",
+    why: "Bot and fake sign-ups are blocked by confirming control of the mailbox and by protecting the form. Releasing the incentive only after confirmation keeps real customers happy. Importing unverified sign-ups risks bounces and spam traps.",
   },
   {
     id: "p26",
     domain: "practices",
     prompt:
-      "A brand starts a triggered abandoned-cart email. A marketer wants to follow best practice for timing and frequency. Which design is best?",
+      "An abandoned-cart series sends email 1 after 1 hour, email 2 after 24 hours and email 3 after 72 hours. Reporting shows that 35% of recipients purchase after email 1, yet email 2 and 3 still go to them for the next two days, triggering complaints. What is the best correction?",
     choices: [
-      { id: "a", text: "Send the first reminder within hours, a follow-up a day or two later, and stop once the customer purchases" },
-      { id: "b", text: "Send ten reminders over two days regardless of whether the customer completes the purchase" },
-      { id: "c", text: "Send a single reminder three weeks later, when the customer is least likely to have moved on" },
-      { id: "d", text: "Send reminders only to customers who have already purchased the items in the cart" },
+      { id: "a", text: "Exit contacts when the purchase event is recorded and keep the cadence for non-purchasers" },
+      { id: "b", text: "Cut the series to a single email, because follow-ups never add revenue after the first reminder" },
+      { id: "c", text: "Send all three emails within the first hour so that buyers cannot receive them days after purchasing" },
+      { id: "d", text: "Add a coupon to email 2 and 3 so that the buyers feel rewarded for the emails they receive" },
     ],
     correct: ["a"],
-    why: "Cart reminders convert best when they are timely, limited in number, and stop after conversion. Over-sending or sending to buyers wastes goodwill; sending weeks later misses the intent.",
+    why: "Purchasers must leave the series. Journey goals or exit criteria on the purchase event stop irrelevant reminders and the complaints they cause, while the non-purchasers still get the sequence.",
   },
 ];

@@ -49,7 +49,7 @@ export const CONTENT: Question[] = [
     prompt:
       "A marketer is building a promotional email with dynamic content. Rule 1: Region = 'North' shows block A. Rule 2: Loyalty = 'Gold' shows block B. A default block C exists. A subscriber lives in the North region and is a Gold member. Which block does the subscriber see?",
     choices: [
-      { id: "a", text: "Block A, because dynamic content rules are evaluated in order and the first matching rule wins" },
+      { id: "a", text: "Block A, since rules are evaluated in order and the first match wins" },
       { id: "b", text: "Block B, because Gold outranks region" },
       { id: "c", text: "Both A and B" },
       { id: "d", text: "Block C, because two rules match and the default resolves the conflict" },
@@ -315,7 +315,7 @@ export const CONTENT: Question[] = [
     prompt:
       "A user wants to see exactly how an email with AMPscript, dynamic content and personalization will render for three different real subscribers before it is sent. Which approach is correct?",
     choices: [
-      { id: "a", text: "Use Preview and Test, select each subscriber or data extension row, and review the rendered email for each" },
+      { id: "a", text: "Use Preview and Test, pick each subscriber or data extension row, and review the render for each" },
       { id: "b", text: "Send to the whole list and watch the send job for rendering errors after delivery" },
       { id: "c", text: "Review only the HTML source, since AMPscript errors are visible in the markup" },
       { id: "d", text: "Check the sender profile, which stores a rendered copy of the email for each subscriber" },
@@ -385,7 +385,7 @@ export const CONTENT: Question[] = [
     prompt:
       "Which statement about the difference between a suppression list used as an exclusion on a send and an auto-suppression list is correct?",
     choices: [
-      { id: "a", text: "An exclusion applies to one send; an auto-suppression list applies to every send using a given send classification" },
+      { id: "a", text: "An exclusion applies to one send; an auto-suppression list applies to all sends using a classification" },
       { id: "b", text: "They are identical, because both permanently remove the addresses from All Subscribers" },
       { id: "c", text: "Auto-suppression lists only apply to SMS sends, while exclusions apply to email" },
       { id: "d", text: "Exclusion lists permanently delete the matching subscribers when the send finishes" },
@@ -413,7 +413,7 @@ export const CONTENT: Question[] = [
     prompt:
       "A user creates a send to a sendable data extension. The send fails to start with a message indicating a subscriber relationship problem. Which configuration is most likely missing?",
     choices: [
-      { id: "a", text: "The sendable data extension's send relationship does not map the field holding the subscriber identifier" },
+      { id: "a", text: "The send relationship does not map the field that holds the subscriber identifier" },
       { id: "b", text: "The email has no preheader, which Marketing Cloud requires for sends to data extensions" },
       { id: "c", text: "The IP address has too much reputation, so the system blocks sends to new audiences" },
       { id: "d", text: "The subject line is too long to be matched against the sendable data extension" },

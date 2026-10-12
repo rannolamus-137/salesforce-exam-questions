@@ -92,7 +92,7 @@ const CORE_QUESTIONS: Question[] = [
       "Complaint rates rose at one mailbox provider after a product launch. What is the appropriate short-term remediation?",
     choices: [
       { id: "a", text: "Double send volume so engaged users drown out complaints" },
-      { id: "b", text: "Temporarily scale back volume to that ISP while you clean the audience" },
+      { id: "b", text: "Temporarily scale back volume to that ISP while cleaning the audience" },
       { id: "c", text: "Remove the physical mailing address to shorten the footer" },
       { id: "d", text: "Disable all unsubscribe links for two weeks" },
     ],
@@ -439,7 +439,7 @@ const CORE_QUESTIONS: Question[] = [
     id: "a10",
     domain: "automation",
     prompt:
-      "Contacts should be measured as a group inside one journey rather than as unrelated batch sends, and a high unsubscribe day should raise an alert. Which Einstein feature watches that?",
+      "Northline's welcome journey sends thousands of emails a day. On Tuesday the unsubscribe rate for one journey email jumps far outside its normal range, and the team wants to be alerted to anomalies like this without building reports. Which Einstein feature does that?",
     choices: [
       { id: "a", text: "Einstein Messaging Insights" },
       { id: "b", text: "Einstein Copy Insights" },
@@ -461,7 +461,7 @@ const CORE_QUESTIONS: Question[] = [
       { id: "d", text: "Primary key on a send log" },
     ],
     correct: ["a"],
-    why: "Engagement Frequency estimates how saturated each contact is with your email so you can reduce or add sends. It is separate from content or link tracking.",
+    why: "Engagement Frequency classifies contacts as saturated, on target, or undersaturated so you can suppress or add sends. It is separate from content or link tracking.",
   },
   {
     id: "a12",

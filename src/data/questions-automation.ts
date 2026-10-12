@@ -21,7 +21,7 @@ export const AUTOMATION: Question[] = [
     prompt:
       "A journey sends an email on day 0 and should send a reminder only to contacts who did NOT click a link in that email, three days later. The designer places an Engagement Split directly after the email activity. Almost every contact goes down the 'did not click' path. Why?",
     choices: [
-      { id: "a", text: "The split evaluates the moment the contact arrives, before the contact had any time to click; a Wait activity is needed before it" },
+      { id: "a", text: "The split evaluates the moment contacts arrive, before they can click; add a Wait activity first" },
       { id: "b", text: "Engagement Splits can only evaluate opens, never clicks, so every contact is treated as a non-clicker" },
       { id: "c", text: "The journey needs a Random Split before the Engagement Split to separate engaged contacts" },
       { id: "d", text: "Click activity is recorded only after the journey ends, so the split can never see it" },
@@ -49,7 +49,7 @@ export const AUTOMATION: Question[] = [
     prompt:
       "A running journey needs a change to its first email. The marketer edits the journey and publishes it again. What happens to contacts who are already in the original version?",
     choices: [
-      { id: "a", text: "A new version is created; contacts already in the previous version continue on it, and new entries use the new version" },
+      { id: "a", text: "A new version is created; contacts in the old version finish on it and new entries use the new one" },
       { id: "b", text: "All contacts are removed from the journey so the new version starts with an empty audience" },
       { id: "c", text: "All contacts restart at the beginning of the new version and receive the first email again" },
       { id: "d", text: "Editing a running journey is impossible; it must be deleted and rebuilt from scratch" },
@@ -119,7 +119,7 @@ export const AUTOMATION: Question[] = [
     prompt:
       "An abandoned-cart journey waits up to 24 hours for a purchase event. If the event arrives, the contact should leave the journey and not receive the reminder. If it does not, the reminder should be sent. Which design is best?",
     choices: [
-      { id: "a", text: "A Wait Until API Event activity with a timeout; the 'event received' path ends, the timeout path sends the reminder" },
+      { id: "a", text: "Wait Until API Event with a timeout; the event path exits and the timeout path sends the reminder" },
       { id: "b", text: "A fixed Wait of 24 hours followed by the reminder, with the purchase event handled by a goal" },
       { id: "c", text: "A Random Split of 50/50 between sending the reminder and leaving the journey" },
       { id: "d", text: "A Decision Split on the contact's email address to identify people who have purchased" },
@@ -203,7 +203,7 @@ export const AUTOMATION: Question[] = [
     prompt:
       "A retailer drops a file named orders_20250115.csv on the Enhanced FTP each day with the date in the name. The automation must start only after the file arrives, and the name changes daily. Which setup works?",
     choices: [
-      { id: "a", text: "A File Drop automation with a file naming pattern that includes a date placeholder, followed by the import" },
+      { id: "a", text: "A File Drop automation with a date-pattern file name, followed by the import" },
       { id: "b", text: "A scheduled automation that imports a fixed file named orders.csv at a set time each day" },
       { id: "c", text: "A journey with a Wait activity that checks the Enhanced FTP for new files every hour" },
       { id: "d", text: "A triggered send definition that reads the file name from the FTP and starts the import" },
@@ -245,7 +245,7 @@ export const AUTOMATION: Question[] = [
     prompt:
       "A scheduled automation imports a customer file and then sends a promotional email to the resulting data extension. A rare failure means the file arrives empty. The business wants the send to be blocked when the data extension contains fewer than 1,000 rows. What should be added after the import?",
     choices: [
-      { id: "a", text: "A Verification activity that checks the row count and stops the automation if it is below the threshold" },
+      { id: "a", text: "A Verification activity on the row count that stops the automation below the threshold" },
       { id: "b", text: "A Wait activity of one hour, which gives the file time to finish loading" },
       { id: "c", text: "A Random Split that sends the email to a sample if the row count looks low" },
       { id: "d", text: "A second Import activity that loads the same file again before the send step" },
@@ -301,7 +301,7 @@ export const AUTOMATION: Question[] = [
     prompt:
       "An email must be sent when a customer's birthday arrives each year. The birthday is stored in a data extension. Which approach is most robust?",
     choices: [
-      { id: "a", text: "A daily query that selects today's birthdays into a data extension used as a journey entry source or audience" },
+      { id: "a", text: "A daily query selecting today's birthdays into a data extension used as the entry source" },
       { id: "b", text: "A manual send every morning by a marketer who checks the birthdays list" },
       { id: "c", text: "A single scheduled send to the entire list in January with a birthday-themed banner" },
       { id: "d", text: "A weekly newsletter that mentions upcoming birthdays among other content" },
@@ -313,15 +313,15 @@ export const AUTOMATION: Question[] = [
     id: "a35",
     domain: "automation",
     prompt:
-      "A journey must send an email to a contact only on weekdays between 9 and 17. Contacts enter at all hours. Which approach is supported in Journey Builder?",
+      "A nightly automation runs a Query activity that builds tomorrow's audience in a data extension. A journey uses that data extension as an Event-based entry source, and the team wants contacts admitted immediately after the query finishes, not on a separate clock time that might fire before the query is done. What should be added to the automation?",
     choices: [
-      { id: "a", text: "Use a wait or send-window configuration so the email is held until the allowed time" },
-      { id: "b", text: "Delete contacts who enter outside business hours so they never reach the email activity" },
-      { id: "c", text: "Send immediately when contacts enter and rely on mailbox providers to hold overnight mail" },
-      { id: "d", text: "Add a second sender profile that is only active between 9 a.m. and 5 p.m. on weekdays" },
+      { id: "a", text: "A Fire Event activity in a step after the query, which admits the contacts to the journey" },
+      { id: "b", text: "A second Query activity in the same step as the first, which pushes the rows into the journey" },
+      { id: "c", text: "A Wait activity of two hours followed by a Verification activity on the journey" },
+      { id: "d", text: "A Filter activity that copies the audience into the journey's goal definition" },
     ],
     correct: ["a"],
-    why: "Waits (and, where available, send-time controls) let a journey delay delivery to a desired window. Removing contacts or ignoring time constraints does not meet the requirement.",
+    why: "The Fire Event activity in Automation Studio triggers a journey event for the contacts in the data extension, so entry happens right after the preceding step completes. Putting it in a later step guarantees the query has finished first, whereas same-step activities run in parallel.",
   },
   {
     id: "a36",
@@ -439,29 +439,29 @@ export const AUTOMATION: Question[] = [
     id: "a44",
     domain: "automation",
     prompt:
-      "A journey must call an email at 8 a.m. in each contact's local time for a global audience. Time zone is stored as an attribute. Which option helps?",
+      "A journey has a Decision Split with two paths: Region = East and Region = West. Some contacts have a blank Region, and others have 'Central'. A marketer expected the journey to error for them. What actually happens to those contacts?",
     choices: [
-      { id: "a", text: "Use a send-time or time-zone aware setting based on the contact's time zone attribute" },
-      { id: "b", text: "Send at 8 a.m. in the sender's time zone only, since the journey cannot read contact attributes" },
-      { id: "c", text: "Create a Decision Split for each country and a separate email send for each of them" },
-      { id: "d", text: "Disable scheduling so that all contacts receive the email as soon as they enter" },
+      { id: "a", text: "They take the remainder path, which catches contacts matching none of the defined paths" },
+      { id: "b", text: "They are removed from the journey as soon as they reach the split" },
+      { id: "c", text: "They are routed to the first path because that is the default" },
+      { id: "d", text: "The journey pauses until the Region value is filled in" },
     ],
     correct: ["a"],
-    why: "Time-zone aware sending (through attributes or send-time features) adjusts delivery to the contact's local time. Splitting by country on the canvas is unwieldy and a single fixed time ignores the audience's spread.",
+    why: "A Decision Split always has a remainder path for contacts that fit no criteria. If nothing is connected to it, contacts simply leave the journey there, so design a useful remainder path when blank or unexpected values are possible.",
   },
   {
     id: "a45",
     domain: "automation",
     prompt:
-      "A team notices that a journey's Email activity shows the status 'Ready to send' but nobody is receiving mail after activation. The entry data extension has contacts. What should the team check first?",
+      "A journey's entry data extension is populated from two systems: the web store supplies a customer ID in the ContactKey column, while a call-centre import supplies the customer's email address in the same column. The same person now appears as two different contacts in Journey Builder and receives the welcome email twice. What is the correct fix?",
     choices: [
-      { id: "a", text: "Whether contacts have actually entered the journey and whether the entry schedule or event has fired" },
-      { id: "b", text: "The color of the email header, since the journey ignores messages with low contrast" },
-      { id: "c", text: "The number of images in the email, because journeys skip messages with heavy images" },
-      { id: "d", text: "The font used in the footer, since unsupported fonts stop an email from sending" },
+      { id: "a", text: "Use one unique, stable identifier such as the customer ID as the Contact Key in every source" },
+      { id: "b", text: "Switch the journey to Re-entry anytime so duplicates are merged on the next entry" },
+      { id: "c", text: "Add a Decision Split on email address at the start of the journey to drop the duplicates" },
+      { id: "d", text: "Use a Random Split so that only one of the two contacts is likely to receive the email" },
     ],
     correct: ["a"],
-    why: "A journey sends only after contacts have entered and reached the activity. A scheduled data extension entry might not have run yet, or the entry criteria might exclude every record. Visual details do not affect sending.",
+    why: "Journey Builder treats each distinct Contact Key as a different person. Mixing identifiers creates duplicate contacts, split history and double sends. The key must be consistent across sources and match the Subscriber Key. Entry mode and splits do not merge contacts.",
   },
   {
     id: "a46",

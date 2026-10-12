@@ -21,7 +21,7 @@ export const DATA: Question[] = [
     prompt:
       "A customer changes their email address from old@example.com to new@example.com. Their Subscriber Key is CUST-1007. The team imports the new address using CUST-1007 as the key. What is the result?",
     choices: [
-      { id: "a", text: "The existing subscriber is updated with the new address, and history and status remain attached to CUST-1007" },
+      { id: "a", text: "The subscriber is updated with the new address, and history and status stay with CUST-1007" },
       { id: "b", text: "A second subscriber is created with the new address, and the old one is kept for history" },
       { id: "c", text: "The subscriber is automatically unsubscribed, because a changed address needs reconsent" },
       { id: "d", text: "The import fails because an email address cannot change once the subscriber exists" },
@@ -49,7 +49,7 @@ export const DATA: Question[] = [
     prompt:
       "A subscriber who chose 'Unsubscribe from all' appears again in a new import file and the import is configured to add and update. The marketer wants to be sure the person does not receive commercial email. Which statement is correct?",
     choices: [
-      { id: "a", text: "The subscriber's status stays Unsubscribed unless explicitly reactivated, and sends honor that status" },
+      { id: "a", text: "Their status stays Unsubscribed unless explicitly reactivated, and sends honor it" },
       { id: "b", text: "Importing a record with the same key always resets its status to Active" },
       { id: "c", text: "Subscriber status is ignored at send time and only checked in reports" },
       { id: "d", text: "The import deletes the record and recreates it as a new, active subscriber" },
@@ -63,7 +63,7 @@ export const DATA: Question[] = [
     prompt:
       "A company stores a purchase date in a Date field in a data extension. A marketer imports a date as 2025-03-01 09:00 and later sees the value displayed as 2025-03-01 03:00 in a different system. What explains the difference?",
     choices: [
-      { id: "a", text: "Marketing Cloud stores dates in Central Standard Time (UTC-6, no daylight saving), so other zones appear shifted" },
+      { id: "a", text: "Marketing Cloud stores dates in Central Standard Time (UTC-6, no DST), so other zones appear shifted" },
       { id: "b", text: "Marketing Cloud rounds every stored time down to the nearest hour on import" },
       { id: "c", text: "Date fields drop the time zone because they are stored as plain text" },
       { id: "d", text: "The data extension is not sendable, so date values are shown in the sender's time zone" },
@@ -119,7 +119,7 @@ export const DATA: Question[] = [
     prompt:
       "A data extension currently has no retention policy. A marketer sets 'Delete individual records' after 30 days. What will be deleted?",
     choices: [
-      { id: "a", text: "Rows whose age exceeds 30 days according to the retention rule; the data extension structure stays" },
+      { id: "a", text: "Rows older than 30 days under the retention rule; the data extension structure stays" },
       { id: "b", text: "The entire data extension and its structure, once the 30-day window passes" },
       { id: "c", text: "Only the rows whose subscribers have unsubscribed during the last 30 days" },
       { id: "d", text: "Nothing, until the retention policy is deleted from the data extension" },
@@ -175,7 +175,7 @@ export const DATA: Question[] = [
     prompt:
       "An analyst wants to query send and open data from 14 months ago. The data views return nothing for that period. What is the reason?",
     choices: [
-      { id: "a", text: "Tracking data views keep only a limited window (about six months); older history must be archived earlier" },
+      { id: "a", text: "Tracking data views keep only a limited window (about six months); archive older history earlier" },
       { id: "b", text: "The query syntax is wrong, because older dates must be written in UTC" },
       { id: "c", text: "Data views are only available on the first day of each month and are cleared after" },
       { id: "d", text: "Data views contain only unsubscribed contacts, so the history is not there to query" },
@@ -223,7 +223,7 @@ export const DATA: Question[] = [
       { id: "d", text: "The row is sent as an SMS instead because the subscriber record is missing" },
     ],
     correct: ["a"],
-    why: "When sending to a data extension, subscribers that are not yet in All Subscribers are added using the key and email address from the row. Rows without a valid email address are skipped.",
+    why: "When sending to a data extension, a subscriber that is not yet in All Subscribers is created from the row's key and email address. This works only if the data extension is sendable, its send relationship points at the key field, and it has exactly one EmailAddress-type field.",
   },
   {
     id: "d29",
@@ -343,7 +343,7 @@ export const DATA: Question[] = [
     prompt:
       "An enterprise has a non-sendable data extension of customer purchases and a sendable data extension of customers. A journey must branch on 'total spend'. How is the data modeled for use in Journey Builder?",
     choices: [
-      { id: "a", text: "Relate both data extensions to the contact in Contact Builder, or precompute total spend onto the customer record" },
+      { id: "a", text: "Relate both data extensions to the contact in Contact Builder, or precompute total spend on the customer" },
       { id: "b", text: "Paste the total spend into the subject line so the Decision Split can read it from the message" },
       { id: "c", text: "Use two journeys, one for each data extension, and merge the paths later" },
       { id: "d", text: "Ignore the purchases data and branch on the email address domain instead" },
@@ -371,7 +371,7 @@ export const DATA: Question[] = [
     prompt:
       "A customer data extension includes a Boolean field 'EmailOptIn'. The marketing team wants to ensure only opted-in customers are emailed, even if the data extension includes everyone. How can they enforce it?",
     choices: [
-      { id: "a", text: "Build the send audience with a filter or query that selects EmailOptIn = true, or use it as a journey entry criterion" },
+      { id: "a", text: "Select EmailOptIn = true in a filter or query, or use it as a journey entry criterion" },
       { id: "b", text: "Trust that the field is applied automatically, since Marketing Cloud reads every Boolean field" },
       { id: "c", text: "Email everyone, and hide the unsubscribe link for those whose EmailOptIn is false" },
       { id: "d", text: "Rename the field to Subscribed, which makes Marketing Cloud apply it to every send" },
@@ -385,7 +385,7 @@ export const DATA: Question[] = [
     prompt:
       "A data extension named Web_Leads is populated by a Smart Capture form. The marketing team wants to confirm that each lead has a valid email address and that sending is possible. Which settings matter?",
     choices: [
-      { id: "a", text: "The data extension is sendable, has an email address field, and its send relationship is mapped to the subscriber" },
+      { id: "a", text: "The data extension is sendable, has an email field, and its send relationship maps to the subscriber" },
       { id: "b", text: "The data extension has a long name, and the Smart Capture form uses a long button label" },
       { id: "c", text: "The data extension has a retention policy of one year so leads are not deleted too soon" },
       { id: "d", text: "The form uses a button, and the lead's email address is stored in a profile attribute" },
