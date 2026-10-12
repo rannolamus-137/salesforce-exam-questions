@@ -26,8 +26,8 @@ export function Home() {
           <h2 className="text-2xl">Full bank</h2>
           <p className="mt-2 text-muted">
             {QUESTIONS.length} original items across the five published sections. Study mode
-            explains each answer immediately. Exam mode hides the why until the end and runs a
-            90-minute clock.
+            explains each answer immediately. Exam mode draws 60 questions weighted like the real
+            exam, hides the why until the end and runs a 90-minute clock.
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
             <button

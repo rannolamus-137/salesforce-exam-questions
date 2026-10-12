@@ -1,3 +1,9 @@
+import { PRACTICES } from "./questions-practices";
+import { CONTENT } from "./questions-content";
+import { AUTOMATION } from "./questions-automation";
+import { DATA } from "./questions-data";
+import { INSIGHTS } from "./questions-insights";
+
 export type DomainId =
   | "practices"
   | "content"
@@ -50,7 +56,7 @@ export const DOMAINS: { id: DomainId; label: string; weight: string; blurb: stri
   },
 ];
 
-export const QUESTIONS: Question[] = [
+const CORE_QUESTIONS: Question[] = [
   {
     id: "p1",
     domain: "practices",
@@ -100,9 +106,9 @@ export const QUESTIONS: Question[] = [
       "A commercial newsletter is missing an easy way to leave the list. Which requirement is not being met?",
     choices: [
       { id: "a", text: "A working unsubscribe mechanism in every commercial message" },
-      { id: "b", text: "A dedicated IP for every journey" },
-      { id: "c", text: "AMPscript in the preheader" },
-      { id: "d", text: "Einstein Engagement Scoring on the send" },
+      { id: "b", text: "A dedicated sending IP address reserved for each journey or program" },
+      { id: "c", text: "AMPscript personalization applied to the preheader of each message" },
+      { id: "d", text: "Einstein Engagement Scoring enabled on every commercial send" },
     ],
     correct: ["a"],
     why: "Commercial email needs a clear, functional unsubscribe (and a valid physical address under CAN-SPAM-style rules). Dedicated IP and Einstein are optional capabilities, not the legal baseline.",
@@ -114,9 +120,9 @@ export const QUESTIONS: Question[] = [
       "Northline is warming a new dedicated IP and wants low-volume transactional mail on it first. Why start small and consistent?",
     choices: [
       { id: "a", text: "Mailbox providers build trust from steady, low-complaint history on a new IP" },
-      { id: "b", text: "A new IP only accepts transactional classification" },
-      { id: "c", text: "Warm-up disables tracking until 30 days pass" },
-      { id: "d", text: "Shared IPs cannot send transactional mail" },
+      { id: "b", text: "A new IP address can only be classified for transactional mail until it is 30 days old" },
+      { id: "c", text: "Warm-up keeps open and click tracking disabled until the new IP has a reputation" },
+      { id: "d", text: "Shared IP pools are technically unable to deliver any transactional messages" },
     ],
     correct: ["a"],
     why: "IP warm-up is a reputation ramp: predictable volume, clean lists, and strong engagement. Classification and tracking are not locked by age of the IP.",
@@ -170,9 +176,9 @@ export const QUESTIONS: Question[] = [
       "An email repeats the same product URL three times. Analytics must show which placement was clicked. What should be added on each anchor?",
     choices: [
       { id: "a", text: "A unique alias (or link name) so tracking can tell the links apart" },
-      { id: "b", text: "The same alias on every anchor" },
-      { id: "c", text: "A Subscriber Key query string only" },
-      { id: "d", text: "target=\"_blank\" and nothing else" },
+      { id: "b", text: "The same alias on every anchor, since the alias is a label for the destination URL" },
+      { id: "c", text: "A Subscriber Key query string appended to each link so that web analytics can separate them" },
+      { id: "d", text: "target=\"_blank\" on each anchor, which makes Marketing Cloud record each placement separately" },
     ],
     correct: ["a"],
     why: "Marketing Cloud tracks links by alias. Identical URLs collapse into one metric unless each <a> has a distinct alias.",
@@ -198,9 +204,9 @@ export const QUESTIONS: Question[] = [
       "Loyalty members should see a private offer block; everyone else sees the public block, chosen at send time from one email. What fits?",
     choices: [
       { id: "a", text: "Dynamic content rules driven by a profile or data-extension attribute" },
-      { id: "b", text: "Two entirely separate sender profiles" },
-      { id: "c", text: "A suppression list of all loyalty members" },
-      { id: "d", text: "Changing the Subscriber Key per version" },
+      { id: "b", text: "Two entirely separate sender profiles, one for loyalty members and one for everyone else" },
+      { id: "c", text: "A suppression list containing all loyalty members so they do not see the public offer" },
+      { id: "d", text: "A different Subscriber Key for each version of the message so each audience is tracked apart" },
     ],
     correct: ["a"],
     why: "Dynamic content swaps blocks inside one message using rules on attributes. Suppression would exclude people, not change creative.",
@@ -296,9 +302,9 @@ export const QUESTIONS: Question[] = [
       "A send must be classified as transactional so it is not treated like a promotion for consent and frequency. Where is that declared?",
     choices: [
       { id: "a", text: "Send classification (transactional vs commercial), used with the send" },
-      { id: "b", text: "The image alt text" },
-      { id: "c", text: "The data extension name prefix only" },
-      { id: "d", text: "CAN-SPAM is ignored if the subject says Order" },
+      { id: "b", text: "The image alt text, which tells mailbox providers whether the message is a receipt" },
+      { id: "c", text: "The data extension name prefix, because names beginning with Order are treated as transactional" },
+      { id: "d", text: "The subject line alone, since CAN-SPAM no longer applies when it contains the word Order" },
     ],
     correct: ["a"],
     why: "Send classification tells Marketing Cloud whether the message is commercial or transactional, which affects footer behavior and how you should use consent. The subject line alone does not set it.",
@@ -310,9 +316,9 @@ export const QUESTIONS: Question[] = [
       "After a welcome email, the journey should continue only when the contact purchases on the website. Which journey activity fits?",
     choices: [
       { id: "a", text: "Wait Until Event (or a wait that listens for the purchase event)" },
-      { id: "b", text: "Random Split" },
-      { id: "c", text: "Update Contact that deletes the contact key" },
-      { id: "d", text: "File Transfer" },
+      { id: "b", text: "Random Split, configured so that purchasers are routed down the first path" },
+      { id: "c", text: "Update Contact, set to delete the contact key once the purchase is recorded" },
+      { id: "d", text: "File Transfer, which waits for a purchase file to arrive from the website" },
     ],
     correct: ["a"],
     why: "Wait Until Event holds the contact until a defined engagement or API event (such as a purchase) occurs, or until a timeout path. A random split does not listen for behavior.",
@@ -324,9 +330,9 @@ export const QUESTIONS: Question[] = [
       "A journey sends up to three offers but must stop for a person as soon as they purchase, and still report who converted. What should Northline use?",
     choices: [
       { id: "a", text: "A goal (or exit) on the purchase event so converters leave, with goal reporting" },
-      { id: "b", text: "Three separate one-off sends with no journey" },
-      { id: "c", text: "A suppression of the entire audience before entry" },
-      { id: "d", text: "Engagement Frequency turned off" },
+      { id: "b", text: "Three separate one-off sends with no journey, each sent to people who have not purchased yet" },
+      { id: "c", text: "A suppression of the entire audience before entry, then re-adding purchasers manually" },
+      { id: "d", text: "Einstein Engagement Frequency turned off so converters are not counted in reporting" },
     ],
     correct: ["a"],
     why: "Journey goals track the desired outcome and can exit contacts who hit it, so later emails do not send. Reporting shows who met the goal.",
@@ -338,9 +344,9 @@ export const QUESTIONS: Question[] = [
       "Every email in a journey is preceded by a decision split whose only job is to drop people who already unsubscribed. How can the journey be simpler?",
     choices: [
       { id: "a", text: "Use exit criteria (or journey settings) so unsubscribed contacts leave automatically" },
-      { id: "b", text: "Add another decision split before the first one" },
-      { id: "c", text: "Change the entry mode to Re-entry anytime" },
-      { id: "d", text: "Replace emails with SQL Query activities" },
+      { id: "b", text: "Add another decision split before the first one so unsubscribed contacts are filtered twice" },
+      { id: "c", text: "Change the entry mode to Re-entry anytime so unsubscribed contacts can leave and rejoin" },
+      { id: "d", text: "Replace the email activities with SQL Query activities that exclude unsubscribed contacts" },
     ],
     correct: ["a"],
     why: "Exit criteria remove contacts when a condition becomes true, so you do not need a filter split before every message. Marketing Cloud also honors unsubscribe status at send time.",
@@ -380,9 +386,9 @@ export const QUESTIONS: Question[] = [
       "A file of new leads lands on the enhanced FTP every weekday at 6 a.m. and must be imported, queried, then emailed. Which Automation Studio start is the best fit if the file name is the trigger?",
     choices: [
       { id: "a", text: "File Drop automation, then Import, Query, and Send Email activities" },
-      { id: "b", text: "A journey Wait by Attribute of 6 hours only" },
-      { id: "c", text: "Triggered send with no file" },
-      { id: "d", text: "Manual send flow each morning" },
+      { id: "b", text: "A journey Wait by Attribute of six hours, followed by a manual import each morning" },
+      { id: "c", text: "A triggered send that reads the file directly from the Enhanced FTP when it lands" },
+      { id: "d", text: "A manual send flow, with a marketer importing and mailing the file each morning" },
     ],
     correct: ["a"],
     why: "File Drop starts an automation when a file arrives. Import loads it, Query shapes the audience, and Send Email delivers. A schedule is an alternative if the file is already reliable at a clock time.",
@@ -408,9 +414,9 @@ export const QUESTIONS: Question[] = [
       "An automation should not send if the import row count is unexpectedly tiny. What do you add?",
     choices: [
       { id: "a", text: "A Verification activity that stops the automation when the count is out of range" },
-      { id: "b", text: "A Random Split" },
-      { id: "c", text: "More subject-line aliases" },
-      { id: "d", text: "A second identical import with no check" },
+      { id: "b", text: "A Random Split that sends only half of the audience when the count looks low" },
+      { id: "c", text: "More subject-line aliases, so a small audience still produces reportable link data" },
+      { id: "d", text: "A second identical import with no check, which usually brings the count back in range" },
     ],
     correct: ["a"],
     why: "Verification activities assert conditions (for example row counts) and can halt the automation before a bad send.",
@@ -455,7 +461,7 @@ export const QUESTIONS: Question[] = [
       { id: "d", text: "Primary key on a send log" },
     ],
     correct: ["a"],
-    why: "Engagement Frequency classifies contacts as saturated, on target, or undersaturated so you can suppress or add sends. It is separate from content or link tracking.",
+    why: "Engagement Frequency estimates how saturated each contact is with your email so you can reduce or add sends. It is separate from content or link tracking.",
   },
   {
     id: "a12",
@@ -534,9 +540,9 @@ export const QUESTIONS: Question[] = [
       "A nightly CSV has one million rows. It must land in a data extension without a marketer pasting rows. What should run?",
     choices: [
       { id: "a", text: "An Import activity (or scheduled import) from the FTP file" },
-      { id: "b", text: "Manual add-subscriber, one row at a time" },
-      { id: "c", text: "Preview and Test" },
-      { id: "d", text: "Engagement Split" },
+      { id: "b", text: "Manual add-subscriber in the interface, one row at a time, by a marketer overnight" },
+      { id: "c", text: "Preview and Test, which loads the file's rows into a data extension for review" },
+      { id: "d", text: "An Engagement Split that routes the rows from the FTP into a data extension" },
     ],
     correct: ["a"],
     why: "Import activities map a file to a data extension at scale and belong in Automation Studio. The UI add flow is for tiny updates.",
@@ -576,9 +582,9 @@ export const QUESTIONS: Question[] = [
       "A sendable data extension must relate to subscribers. Which setting is required?",
     choices: [
       { id: "a", text: "Sendable, with the relate-to-subscriber field mapped to Subscriber Key" },
-      { id: "b", text: "Non-sendable, and send anyway" },
-      { id: "c", text: "No primary key and duplicate emails in every row" },
-      { id: "d", text: "The field mapped to the image URL" },
+      { id: "b", text: "Non-sendable, with the audience selected by a filter at send time" },
+      { id: "c", text: "No primary key and duplicate email addresses in every row, matched on send" },
+      { id: "d", text: "The field mapped to the image URL so each row relates to a content block" },
     ],
     correct: ["a"],
     why: "Sendable data extensions declare which column matches the subscriber (Subscriber Key or email, depending on the account). That relationship is what makes the audience mailable.",
@@ -590,9 +596,9 @@ export const QUESTIONS: Question[] = [
       "Two imports of the same customer created two subscriber records because the key changed. What is the symptom in reporting?",
     choices: [
       { id: "a", text: "Engagement history is split across identities and preference status can diverge" },
-      { id: "b", text: "The IP address is automatically warmed" },
-      { id: "c", text: "All subject lines are rewritten by Einstein" },
-      { id: "d", text: "Templates unlock themselves" },
+      { id: "b", text: "The IP address is automatically re-warmed because the sending identity changed" },
+      { id: "c", text: "All subject lines are rewritten by Einstein because the history looks incomplete" },
+      { id: "d", text: "Templates unlock themselves because the subscriber appears to be a new contact" },
     ],
     correct: ["a"],
     why: "Subscriber Key is the join for status and history. Changing it treats the person as new, so unsubscribes and engagement no longer line up.",
@@ -604,9 +610,9 @@ export const QUESTIONS: Question[] = [
       "A contact bounced as Held after repeated soft issues. What does that mean for future commercial sends?",
     choices: [
       { id: "a", text: "Marketing Cloud will not try to deliver to that subscriber until status is corrected" },
-      { id: "b", text: "Held means they are the best target for a re-engagement blast" },
-      { id: "c", text: "Held only affects push, not email" },
-      { id: "d", text: "The address is deleted from the FTP" },
+      { id: "b", text: "Held means they are the best target for a re-engagement blast to confirm the address" },
+      { id: "c", text: "Held only affects push notifications, so email sends continue to the address as usual" },
+      { id: "d", text: "The address is deleted from the FTP and from the data extension during the next import" },
     ],
     correct: ["a"],
     why: "Held (and undeliverable) status stops further delivery attempts so you do not keep mailing a bad address and damaging reputation.",
@@ -618,9 +624,9 @@ export const QUESTIONS: Question[] = [
       "Child business units share people, and links must show which business unit sent the message. Which personalization string is appended as a parameter?",
     choices: [
       { id: "a", text: "The member ID / business unit identifier personalization string" },
-      { id: "b", text: "The email preheader length" },
-      { id: "c", text: "A random alias that changes every open" },
-      { id: "d", text: "The delivery profile footer HTML" },
+      { id: "b", text: "The email preheader length, which shows the business unit in the inbox" },
+      { id: "c", text: "A random alias that changes on every open so each business unit is tracked separately" },
+      { id: "d", text: "The delivery profile footer HTML, which tells analytics which business unit sent the message" },
     ],
     correct: ["a"],
     why: "Personalization strings such as memberid identify the business unit on the send and can be passed on links for downstream analytics. Alias identifies the link, not the business unit.",
@@ -673,9 +679,9 @@ export const QUESTIONS: Question[] = [
       "Northline wants subscribers grouped by likelihood to open, click, and unsubscribe before a win-back program. Which model?",
     choices: [
       { id: "a", text: "Einstein Engagement Scoring (personas such as Loyalists and Window Shoppers)" },
-      { id: "b", text: "Einstein Content Tagging on images only" },
-      { id: "c", text: "File naming conventions" },
-      { id: "d", text: "Dynamic From Name" },
+      { id: "b", text: "Einstein Content Tagging, which groups subscribers by the images they have opened" },
+      { id: "c", text: "File naming conventions, which separate engaged and unengaged subscribers by name" },
+      { id: "d", text: "A dynamic From Name that changes depending on the subscriber's likelihood to engage" },
     ],
     correct: ["a"],
     why: "Engagement Scoring predicts open, click, and unsubscribe likelihood and groups people into personas you can target differently.",
@@ -715,9 +721,9 @@ export const QUESTIONS: Question[] = [
       "Leadership wants one screen of sends across business units for the past year with basic metrics, without a custom query. Which style of report fits?",
     choices: [
       { id: "a", text: "An account-level send summary / email performance report in Analytics Builder" },
-      { id: "b", text: "A single subscriber’s preview" },
-      { id: "c", text: "The import error log only" },
-      { id: "d", text: "Content Builder folder permissions" },
+      { id: "b", text: "A single subscriber's Preview and Test view, which summarizes sends for one person" },
+      { id: "c", text: "The import error log, which lists every message sent through the import" },
+      { id: "d", text: "Content Builder folder permissions, which show activity per business unit" },
     ],
     correct: ["a"],
     why: "Standard reports such as Account Send Summary and Email Performance Over Time aggregate sends and rates. Preview is a rendering tool, not a yearly inventory.",
@@ -729,9 +735,9 @@ export const QUESTIONS: Question[] = [
       "Unsubscribe reasons mention Reply Mail Management even though RMM is not enabled. What else writes those unsubscribes?",
     choices: [
       { id: "a", text: "The List-Unsubscribe header, which mailbox providers can turn into an unsubscribe" },
-      { id: "b", text: "Einstein Copy Insights changing the footer" },
-      { id: "c", text: "A non-sendable data extension" },
-      { id: "d", text: "Locked template regions" },
+      { id: "b", text: "Einstein Copy Insights, which changes the footer when it detects low engagement" },
+      { id: "c", text: "A non-sendable data extension, which records opt-outs from other systems" },
+      { id: "d", text: "Locked template regions, which unsubscribe subscribers who do not open the email" },
     ],
     correct: ["a"],
     why: "Marketing Cloud can add a List-Unsubscribe header. Providers such as Gmail expose that as an unsubscribe control, so the reason can reference RMM-style unsub even when classic RMM is off.",
@@ -743,9 +749,9 @@ export const QUESTIONS: Question[] = [
       "Product recommendations in the email should be “people who bought this also bought.” Which capability is that?",
     choices: [
       { id: "a", text: "Einstein Recommendations (for example a Bought Bought scenario)" },
-      { id: "b", text: "Einstein Copy Insights" },
-      { id: "c", text: "Einstein Messaging Insights" },
-      { id: "d", text: "A publication list" },
+      { id: "b", text: "Einstein Copy Insights, which suggests items based on how similar subject lines performed" },
+      { id: "c", text: "Einstein Messaging Insights, which recommends products after reviewing click rates" },
+      { id: "d", text: "A publication list for each product, which groups subscribers who have bought them" },
     ],
     correct: ["a"],
     why: "Einstein Recommendations (email or web) uses catalog and behavior scenarios such as bought-bought or click-bought. It does not analyze subject-line tone or send anomalies.",
@@ -757,9 +763,9 @@ export const QUESTIONS: Question[] = [
       "Before a launch, the team wants a predicted engagement range for ten candidate subject lines. Where do they do that?",
     choices: [
       { id: "a", text: "The subject-line performance tester in Einstein Copy Insights" },
-      { id: "b", text: "Delivery profile IP warm-up chart" },
-      { id: "c", text: "All Subscribers status view" },
-      { id: "d", text: "File drop directory listing" },
+      { id: "b", text: "The delivery profile's IP warm-up chart, which scores subject lines for each IP" },
+      { id: "c", text: "The All Subscribers status view, which predicts engagement from subject lines" },
+      { id: "d", text: "A file drop directory listing, which stores past subject lines for comparison" },
     ],
     correct: ["a"],
     why: "Copy Insights includes a tester (when global models are enabled) that compares proposed subject lines with historical language and engagement. It is a planning tool, not a substitute for a live A/B test.",
@@ -778,4 +784,13 @@ export const QUESTIONS: Question[] = [
     correct: ["a"],
     why: "Tracking extracts pull configurable send, open, click, bounce, and unsubscribe files on a schedule. Pair them with File Transfer if the warehouse sits outside Marketing Cloud.",
   },
+];
+
+export const QUESTIONS: Question[] = [
+  ...CORE_QUESTIONS,
+  ...PRACTICES,
+  ...CONTENT,
+  ...AUTOMATION,
+  ...DATA,
+  ...INSIGHTS,
 ];

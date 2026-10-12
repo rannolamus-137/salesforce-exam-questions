@@ -60,8 +60,23 @@ export function shuffle<T>(items: T[]): T[] {
   return copy;
 }
 
+/** Scored questions per section on the real exam (60 total), from the published weights. */
+const EXAM_COUNTS: Record<DomainId, number> = {
+  practices: 6,
+  content: 14,
+  automation: 16,
+  data: 16,
+  insights: 8,
+};
+
+function examBank(): Question[] {
+  return (Object.keys(EXAM_COUNTS) as DomainId[]).flatMap((d) =>
+    shuffle(bankFor(d)).slice(0, EXAM_COUNTS[d]),
+  );
+}
+
 export function newSession(domain: DomainId | "all", mode: Mode): Session {
-  const bank = shuffle(bankFor(domain));
+  const bank = shuffle(mode === "exam" && domain === "all" ? examBank() : bankFor(domain));
   return {
     ids: bank.map((q) => q.id),
     index: 0,

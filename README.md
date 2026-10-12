@@ -1,8 +1,9 @@
 # Cloudline
 
 Scenario practice for the Salesforce Marketing Cloud Engagement Specialist exam.
-52 original questions across the five exam sections, a study mode with instant
-explanations, and a 90-minute timed exam mode.
+About 200 original scenario questions across the five exam sections, a study mode
+with instant explanations, and a 90-minute timed exam mode that draws 60 questions
+weighted like the real exam (10/24/26/26/14%).
 
 These are original practice items aligned to the public exam objectives. They
 are not copies of real exam questions.
