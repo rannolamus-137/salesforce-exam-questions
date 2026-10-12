@@ -8,6 +8,8 @@ weighted like the real exam (10/24/26/26/14%).
 These are original practice items aligned to the public exam objectives. They
 are not copies of real exam questions.
 
+https://rannolamus-137.github.io/salesforce-exam-questions-grok-test/
+
 ## Publish on GitHub Pages
 
 The finished site is already built in the `docs/` folder. Nothing needs to be
